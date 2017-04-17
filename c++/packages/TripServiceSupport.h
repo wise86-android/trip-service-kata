@@ -24,13 +24,12 @@ private:
 class TripService
 {
 public:
-    static std::list<Trip> GetTripsByUser( User user );
-  
-};
+    std::list<Trip> GetTripsByUser( User user );
 
-  
-class UserSession;
-UserSession *oneUserSession=0;
+
+public://need it to test
+    virtual User *getLoggedUser();
+};
 
 class UserSession
 {
@@ -52,6 +51,7 @@ public:
     
 private:
     inline UserSession() {};
+    static UserSession *oneUserSession;
 };
 
 class TripDAO
