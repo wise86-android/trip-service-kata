@@ -13,7 +13,13 @@ public:
     inline void AddFriend( User user ) { friends.push_back( user ); }
     inline std::list<Trip> Trips() { return trips; }
     inline void AddTrip( Trip trip ) { trips.push_back( trip ); }
-
+    inline bool isFriendWith(const User &user){
+        for(const auto& person : friends){
+            if(person == user)
+                return true;
+        }
+        return false;
+    }
     inline bool operator==( const User& other )const { return (other.id==id); }
 private:
     int id;

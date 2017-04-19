@@ -4,7 +4,6 @@ find_package(GMock)
 set(GTEST_LIBS gmock gtest gtest_main)
 
 add_executable(compileTest
-
         compileTest.cpp)
 
 target_link_libraries(compileTest
@@ -17,4 +16,10 @@ add_executable(TripServiceTest
 
 target_link_libraries(TripServiceTest
         tripService
+        ${GTEST_LIBS})
+
+add_executable(UserTest
+        UserTest.cpp)
+
+target_link_libraries(UserTest
         ${GTEST_LIBS})

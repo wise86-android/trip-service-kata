@@ -46,10 +46,8 @@ TEST(TripService,loggedUserWithoutFriendGiveEmptyTrips){
 TEST(TripService,whenUserAreFrendsToTheLoggedOneReturnUserTrip){
     NiceMock<TripServiceMock> service;
 
-    Trip loggedUserTrip;
     Trip friendUserTrip;
     User loggedUser(0);
-    loggedUser.AddTrip(loggedUserTrip);
     User friendUser(1);
     friendUser.AddTrip(friendUserTrip);
     friendUser.AddFriend(loggedUser);

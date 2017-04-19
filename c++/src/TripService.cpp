@@ -6,21 +6,12 @@ std::list<Trip> TripService::GetTripsByUser( User user )
 {
     std::list<Trip> triplist ;
     User* loggedUser = getLoggedUser();
-    bool isFriend = false;
+
     if ( loggedUser )
     {
-        std::list<User>::const_iterator i;
-        for( i = user.GetFriends().begin(); i != user.GetFriends().end(); ++i )
+        if (user.isFriendWith(*loggedUser))
         {
-            if ( *i == *loggedUser )
-            {
-                isFriend = true;
-                break;
-            }
-        }
-        if (isFriend)
-        {
-            triplist = getUserTrip(user);
+            return getUserTrip(user);
         }
         return triplist;
     }
