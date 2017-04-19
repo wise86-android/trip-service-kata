@@ -9,7 +9,7 @@ std::list<Trip> TripService::GetTripsByUser( User user )
     bool isFriend = false;
     if ( loggedUser )
     {
-        std::list<User>::iterator i;
+        std::list<User>::const_iterator i;
         for( i = user.GetFriends().begin(); i != user.GetFriends().end(); ++i )
         {
             if ( *i == *loggedUser )
@@ -20,7 +20,7 @@ std::list<Trip> TripService::GetTripsByUser( User user )
         }
         if (isFriend)
         {
-            triplist = TripDAO::FindTripsByUser(user);
+            triplist = getUserTrip(user);
         }
         return triplist;
     }
@@ -30,6 +30,10 @@ std::list<Trip> TripService::GetTripsByUser( User user )
     }
 }
 
+std::list<Trip> TripService::getUserTrip(const User &user) const {
+    return TripDAO::FindTripsByUser(user); }
+
 User *TripService::getLoggedUser() {
     return UserSession::GetInstance()->GetLoggedUser();
 }
+
