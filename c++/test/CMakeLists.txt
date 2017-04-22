@@ -7,19 +7,12 @@ add_executable(compileTest
         compileTest.cpp)
 
 target_link_libraries(compileTest
-        tripService
         ${GTEST_LIBS})
 
-add_executable(TripServiceTest
-
+add_executable(TripServiceLibTest
+        UserTest.cpp
         TripServiceTest.cpp)
 
-target_link_libraries(TripServiceTest
+target_link_libraries(TripServiceLibTest
         tripService
-        ${GTEST_LIBS})
-
-add_executable(UserTest
-        UserTest.cpp)
-
-target_link_libraries(UserTest
         ${GTEST_LIBS})
