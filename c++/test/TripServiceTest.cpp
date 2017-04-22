@@ -11,7 +11,7 @@ class TripServiceMock : public TripService{
 public:
 
     MOCK_METHOD0(getLoggedUser,User*(void));
-    MOCK_CONST_METHOD1(getUserTrip,std::list<Trip>(const User& user));
+    MOCK_CONST_METHOD1(getUserTrip,std::vector<Trip>(const User& user));
 };
 
 
@@ -39,8 +39,8 @@ TEST(TripService,loggedUserWithoutFriendGiveEmptyTrips){
     User unused(1);
     ON_CALL(service,getLoggedUser()).
             WillByDefault(Return(&loggedUser));
-    auto tripList=service.GetTripsByUser(unused);
-    ASSERT_TRUE(tripList.empty());
+    auto tripvector=service.GetTripsByUser(unused);
+    ASSERT_TRUE(tripvector.empty());
 }
 
 TEST(TripService,whenUserAreFrendsToTheLoggedOneReturnUserTrip){
@@ -54,6 +54,6 @@ TEST(TripService,whenUserAreFrendsToTheLoggedOneReturnUserTrip){
     ON_CALL(service,getLoggedUser()).
             WillByDefault(Return(&loggedUser));
     ON_CALL(service,getUserTrip(Eq(friendUser))).WillByDefault(Return(friendUser.Trips()));
-    auto tripList=service.GetTripsByUser(friendUser);
-    ASSERT_FALSE(tripList.empty());
+    auto tripvector=service.GetTripsByUser(friendUser);
+    ASSERT_FALSE(tripvector.empty());
 }

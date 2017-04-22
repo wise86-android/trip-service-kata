@@ -1,8 +1,8 @@
-#include <list>
+#include <vector>
 #include "TripServiceSupport.h"
 UserSession *UserSession::oneUserSession=0;
 
-std::list<Trip> TripService::GetTripsByUser( User user )
+std::vector<Trip> TripService::GetTripsByUser( User user )
 {
     User* loggedUser = getLoggedUser();
     if(loggedUser== nullptr)
@@ -13,7 +13,7 @@ std::list<Trip> TripService::GetTripsByUser( User user )
     return {};
 }
 
-std::list<Trip> TripService::getUserTrip(const User &user) const {
+std::vector<Trip> TripService::getUserTrip(const User &user) const {
     return TripDAO::FindTripsByUser(user); }
 
 User *TripService::getLoggedUser() {
