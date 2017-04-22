@@ -1,4 +1,5 @@
 set(SOURCE_FILES
-        TripService.cpp)
+        TripService.cpp
+        UserSession.cpp)
 
 add_library(tripService ${SOURCE_FILES})

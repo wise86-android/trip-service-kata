@@ -1,5 +1,5 @@
 #include <list>
-#include "packages/TripServiceSupport.h"
+#include "TripService.h"
 
 std::list<Trip> TripService::GetTripsByUser( User user )
 {

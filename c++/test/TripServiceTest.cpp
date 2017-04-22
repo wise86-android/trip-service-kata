@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "TripServiceSupport.h"
+#include "TripService.h"
 
 using ::testing::Return;
 using ::testing::Matcher;
@@ -24,8 +24,8 @@ TEST(TripService,trowWhenUserNotLog){
     try {
         User unused(0);
         service.GetTripsByUser(unused);
-    }catch (const char *s){
-        ASSERT_EQ(strcmp(s,"UserNotLoggedInException"),0);
+    }catch (NoLoggedUser e){
+        SUCCEED();
         return;
     }
     FAIL();
@@ -49,11 +49,11 @@ TEST(TripService,whenUserAreFrendsToTheLoggedOneReturnUserTrip){
     Trip friendUserTrip;
     User::Ptr loggedUser = std::make_shared<User>(0);
     User friendUser(1);
-    friendUser.AddTrip(friendUserTrip);
+    std::vector<Trip> trips = {Trip(),Trip()};
     friendUser.AddFriend(loggedUser);
     ON_CALL(service,getLoggedUser()).
             WillByDefault(Return(loggedUser));
-    ON_CALL(service,getUserTrip(Eq(friendUser))).WillByDefault(Return(friendUser.Trips()));
+    ON_CALL(service,getUserTrip(Eq(friendUser))).WillByDefault(Return(trips));
     auto tripvector=service.GetTripsByUser(friendUser);
     ASSERT_FALSE(tripvector.empty());
 }

@@ -5,8 +5,11 @@
 #ifndef TRIPSERVICE_USER_H_H
 #define TRIPSERVICE_USER_H_H
 
+#include <vector>
 #include <memory>
 #include <algorithm>
+
+#include "Trip.h"
 
 class User {
 public:
@@ -19,10 +22,6 @@ public:
 
     inline void AddFriend(User::Ptr user) { friends.emplace_back(user); }
 
-    inline const std::vector<Trip> &Trips() const { return trips; }
-
-    inline void AddTrip(Trip trip) { trips.push_back(trip); }
-
     inline bool isFriendWith(const User &user) const {
         return std::find_if(std::begin(friends), std::end(friends),
                             [&user](auto personPtr) { return *personPtr == user; })
@@ -33,7 +32,6 @@ public:
 
 private:
     int id;
-    std::vector<Trip> trips;
     std::vector<User::Ptr> friends;
 };
 
