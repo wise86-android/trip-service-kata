@@ -13,19 +13,19 @@ TEST(User,userWithoutFrendIsNotFriend){
 TEST(User,userWithAFriendHasAFriend){
 
     User oneFriend(1);
-    User friendUser(2);
+    User::Ptr friendUser = std::make_shared<User>(2);
     oneFriend.AddFriend(friendUser);
     ASSERT_FALSE(oneFriend.GetFriends().empty());
-    ASSERT_TRUE(oneFriend.isFriendWith(friendUser));
+    ASSERT_TRUE(oneFriend.isFriendWith(*friendUser));
 }
 
 TEST(User,userWithMultipleFriendHasAFriend){
 
     User person(1);
-    User bestFriend(2);
-    User closeFriend(3);
+    User::Ptr bestFriend = std::make_shared<User>(2);
+    User::Ptr closeFriend = std::make_shared<User>(3);
     person.AddFriend(bestFriend);
     person.AddFriend(closeFriend);
     ASSERT_FALSE(person.GetFriends().empty());
-    ASSERT_TRUE(person.isFriendWith(bestFriend));
+    ASSERT_TRUE(person.isFriendWith(*bestFriend));
 }

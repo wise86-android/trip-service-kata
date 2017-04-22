@@ -9,12 +9,12 @@ class Trip
 class TripService
 {
 public:
-    std::vector<Trip> GetTripsByUser( User user );
+    std::vector<Trip> GetTripsByUser(const User &user );
 
 
 protected://need it to test
     virtual std::vector<Trip> getUserTrip(const User&) const;
-    virtual User *getLoggedUser();
+    virtual User::Ptr getLoggedUser();
 };
 
 class UserSession
@@ -30,7 +30,7 @@ public:
     {
         throw "UserSession.IsUserLoggedIn() should not be called in an unit test";
     }
-    inline User* GetLoggedUser()
+    inline User::Ptr GetLoggedUser()
     {
         throw "UserSession.GetLoggedUser() should not be called in an unit test";
     }
