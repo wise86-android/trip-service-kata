@@ -7,23 +7,38 @@ using ::testing::Matcher;
 using ::testing::Eq;
 using ::testing::NiceMock;
 
-class TripServiceMock : public TripService{
+class LoginManagerMock : public LoginManager{
 public:
+    MOCK_CONST_METHOD0(getLoggedUser,User::Ptr (void));
+};
 
-    MOCK_METHOD0(getLoggedUser,User::Ptr (void));
+class TripManagerMock : public TripManager{
+public:
     MOCK_CONST_METHOD1(getUserTrip,std::vector<Trip>(const User& user));
 };
 
+class TripServiceTest : public ::testing::Test{
 
-TEST(TripService,trowWhenUserNotLog){
+protected:
+    NiceMock<TripManagerMock> tripMock;
+    NiceMock<LoginManagerMock> userMock;
+    TripService testService;
 
-    NiceMock<TripServiceMock> service;
+    TripServiceTest():
+            tripMock(),
+            userMock(),
+            testService(userMock,tripMock){}
 
-    ON_CALL(service,getLoggedUser()).WillByDefault(Return(nullptr));
+
+};
+
+TEST_F(TripServiceTest,trowWhenUserNotLog){
+
+    ON_CALL(userMock,getLoggedUser()).WillByDefault(Return(nullptr));
 
     try {
         User unused(0);
-        service.GetTripsByUser(unused);
+        testService.GetTripsByUser(unused);
     }catch (NoLoggedUser e){
         SUCCEED();
         return;
@@ -32,28 +47,26 @@ TEST(TripService,trowWhenUserNotLog){
 
 }
 
-TEST(TripService,loggedUserWithoutFriendGiveEmptyTrips){
+TEST_F(TripServiceTest,loggedUserWithoutFriendGiveEmptyTrips){
 
-    NiceMock<TripServiceMock> service;
     User::Ptr loggedUser = std::make_shared<User>(0);
     User unused(1);
-    ON_CALL(service,getLoggedUser()).
+    ON_CALL(userMock,getLoggedUser()).
             WillByDefault(Return(loggedUser));
-    auto tripvector=service.GetTripsByUser(unused);
+    auto tripvector=testService.GetTripsByUser(unused);
     ASSERT_TRUE(tripvector.empty());
 }
 
-TEST(TripService,whenUserAreFrendsToTheLoggedOneReturnUserTrip){
-    NiceMock<TripServiceMock> service;
+TEST_F(TripServiceTest,whenUserAreFrendsToTheLoggedOneReturnUserTrip){
 
     Trip friendUserTrip;
     User::Ptr loggedUser = std::make_shared<User>(0);
     User friendUser(1);
     std::vector<Trip> trips = {Trip(),Trip()};
     friendUser.AddFriend(loggedUser);
-    ON_CALL(service,getLoggedUser()).
+    ON_CALL(userMock,getLoggedUser()).
             WillByDefault(Return(loggedUser));
-    ON_CALL(service,getUserTrip(Eq(friendUser))).WillByDefault(Return(trips));
-    auto tripvector=service.GetTripsByUser(friendUser);
+    ON_CALL(tripMock,getUserTrip(Eq(friendUser))).WillByDefault(Return(trips));
+    auto tripvector=testService.GetTripsByUser(friendUser);
     ASSERT_FALSE(tripvector.empty());
 }
